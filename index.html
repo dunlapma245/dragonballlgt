@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon Ball Draft Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #e0f7fa; /* Light cyan background */
+            color: #333; /* Dark text color */
+            padding: 20px;
+        }
+        h1 {
+            color: #00796b; /* Teal color */
+        }
+        #teams {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 20px; /* Space between teams */
+        }
+        .team {
+            margin: 10px;
+            padding: 20px;
+            border: 2px solid #00796b;
+            border-radius: 10px;
+            background-color: #ffffff; /* White background for teams */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 250px;
+        }
+        .character-list {
+            list-style-type: none; /* Remove default list style */
+            padding: 0;
+            text-align: left; /* Align list items to the left */
+        }
+        .character-item {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #00796b; /* Teal border for character items */
+            border-radius: 5px;
+            background-color: #b2dfdb; /* Light teal background for character items */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s; /* Smooth transition */
+        }
+        .character-item:hover {
+            background-color: #00796b; /* Darker teal on hover */
+            color: white; /* White text on hover */
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #00796b; /* Teal button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #004d40; /* Darker teal on hover */
+        }
+        #character-log {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #d32f2f; /* Red color for log messages */
+        }
+        ul {
+            list-style-type: none; /* Remove default list style */
+            padding: 0;
+            text-align: left; /* Align list items to the left */
+        }
+        li {
+            margin: 5px 0; /* Add space between list items */
+            padding: 5px;
+            border: 1px solid #00796b; /* Teal border for list items */
+            border-radius: 5px;
+            background-color: #b2dfdb; /* Light teal background for list items */
+        }
+    </style>
+</head>
+<body>
+    <h1>Dragon Ball Draft Game</h1>
+    <div id="teams">
+        <div class="team" id="team1">
+            <h2>Team 1</h2>
+            <div id="team1-list"></div>
+        </div>
+        <div class="team" id="team2">
+            <h2>Team 2</h2>
+            <div id="team2-list"></div>
+        </div>
+        <div class="team" id="team3">
+            <h2>Team 3</h2>
+            <div id="team3-list"></div>
+        </div>
+    </div>
+    <h2>Select a Character:</h2>
+    <ul id="character-list" class="character-list"></ul>
+    <div id="character-log"></div>
+
+    <script>
+        const characters = [
+            {name: "Goku", power_level: 9000, special_ability: "Kamehameha"},
+            {name: "Vegeta", power_level: 8500, special_ability: "Final Flash"},
+            {name: "Gohan", power_level: 8000, special_ability: "Masenko"},
+            {name: "Piccolo", power_level: 7800, special_ability: "Special Beam Cannon"},
+            {name: "Krillin", power_level: 5000, special_ability: "Destructo Disc"},
+            {name: "Trunks", power_level: 7500, special_ability: "Burning Attack"},
+            {name: "Android 18", power_level: 7700, special_ability: "Energy Barrier"},
+            {name: "Frieza", power_level: 8800, special_ability: "Death Beam"},
+            {name: "Majin Buu", power_level: 8700, special_ability: "Candy Beam"},
+            {name: "Cell", power_level: 8600, special_ability: "Absorption"},
+            {name: "Yamcha", power_level: 3500, special_ability: "Wolf Fang Fist"},
+            {name: "Tien Shinhan", power_level: 4000, special_ability: "Tri-Beam"},
+            {name: "Chiaotzu", power_level: 2000, special_ability: "Telekinesis"},
+            {name: "Bulma", power_level: 50, special_ability: "Gadget Genius"},
+            {name: "Master Roshi", power_level: 5000, special_ability: "Kamehameha"},
+            {name: "Chi-Chi", power_level: 100, special_ability: "Martial Arts"},
+            {name: "Mr. Satan", power_level: 200, special_ability: "Showmanship"},
+            {name: "Dende", power_level: 800, special_ability: "Healing"},
+            {name: "Videl", power_level: 1500, special_ability: "Flight"},
+            {name: "Raditz", power_level: 5000, special_ability: "Double Sunday"},
+            {name: "Nappa", power_level: 6000, special_ability: "Giant Storm"},
+            {name: "Bardock", power_level: 7000, special_ability: "Final Spirit Cannon"},
+            {name: "King Vegeta", power_level: 7000, special_ability: "Saiyan Pride"},
+            {name: "Goten", power_level: 4000, special_ability: "Kamehameha"},
+            {name: "Cabba", power_level: 6000, special_ability: "Galick Cannon"},
+            {name: "Kale", power_level: 8500, special_ability: "Berserker Rage"},
+            {name: "Caulifla", power_level: 7500, special_ability: "Energy Cannon"},
+            {name: "Captain Ginyu", power_level: 8000, special_ability: "Body Change"},
+            {name: "Jeice", power_level: 5000, special_ability: "Crusher Ball"},
+            {name: "Burter", power_level: 4000, special_ability: "Speed Blitz"},
+            {name: "Recoome", power_level: 6500, special_ability: "Recoome Boom"},
+            {name: "Guldo", power_level: 3000, special_ability: "Time Freeze"},
+            {name: "Zarbon", power_level: 5000, special_ability: "Transformation"},
+            {name: "Dodoria", power_level: 4500, special_ability: "Energy Blast"},
+            {name: "Babidi", power_level: 2000, special_ability: "Mind Control"},
+            {name: "Dabura", power_level: 7500, special_ability: "Stone Spit"},
+            {name: "Broly", power_level: 9000, special_ability: "Gigantic Roar"},
+            {name: "Beerus", power_level: 9500, special_ability: "Destruction"},
+            {name: "Whis", power_level: 9900, special_ability: "Angelic Power"},
+            {name: "Shenron", power_level: 9000, special_ability: "Wish Granting"},
+        ];
+
+        let teams = [[], [], []];
+
+        // Populate character list
+        function populateCharacterList() {
+            const characterList = document.getElementById('character-list');
+            characters.forEach((character) => {
+                const characterItem = document.createElement('li');
+                characterItem.classList.add('character-item');
+                characterItem.textContent = `${character.name} (Power: ${character.power_level}, Ability: ${character.special_ability})`;
+                characterItem.onclick = () => selectCharacter(character);
+                characterList.appendChild(characterItem);
+            });
+        }
+
+        function selectCharacter(character) {
+            const teamNumber = prompt("Select your team number
